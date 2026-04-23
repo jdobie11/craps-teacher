@@ -19,11 +19,17 @@ const DOT_POSITIONS = {
   6: [[25,20],[75,20],[25,50],[75,50],[25,80],[75,80]],
 };
 
-// Odds payouts by point
-const ODDS_PAYOUT = { 4:2, 5:1.5, 6:1.2, 8:1.2, 9:1.5, 10:2 };
+// Odds payouts by point — expressed as exact fractions to avoid float rounding
+// Pass odds: 4/10 pay 2:1, 5/9 pay 3:2, 6/8 pay 6:5
+const ODDS_PAYOUT = { 4:2, 5:3/2, 6:6/5, 8:6/5, 9:3/2, 10:2 };
 const ODDS_LABEL  = { 4:"2:1", 5:"3:2", 6:"6:5", 8:"6:5", 9:"3:2", 10:"2:1" };
-// For lay odds (don't pass / don't come), risk more to win less
-const LAY_PAYOUT  = { 4:0.5, 5:0.667, 6:0.833, 8:0.833, 9:0.667, 10:0.5 };
+// Lay odds (Don't Pass/Come): 4/10 pay 1:2, 5/9 pay 2:3, 6/8 pay 5:6
+const LAY_PAYOUT  = { 4:1/2, 5:2/3, 6:5/6, 8:5/6, 9:2/3, 10:1/2 };
+// Clean bet multiples so payouts are always whole dollars
+// Pass: 6/8 → multiples of $5; 5/9 → multiples of $2; 4/10 → any
+// Lay:  6/8 → multiples of $6; 5/9 → multiples of $3; 4/10 → multiples of $2
+const ODDS_CLEAN_MULT = { 4:1, 5:2, 6:5, 8:5, 9:2, 10:1 };
+const LAY_CLEAN_MULT  = { 4:2, 5:3, 6:6, 8:6, 9:3, 10:2 };
 
 // ─── Table Diagram ────────────────────────────────────────────────────────────
 
@@ -322,6 +328,9 @@ function OddsDetailPanel({ point, oddsMultiplier, passLineBet, passOddsBet }) {
           Place chips <em style={{color:"#777"}}>behind</em> Pass Line, outside the rail.{" "}
           <em style={{color:"#777"}}>"Odds on the pass."</em>
         </div>
+        <div style={{marginTop:4,fontSize:10,color:"#4a4a4a",lineHeight:1.6}}>
+          Bet in clean multiples for whole-dollar payouts: 6/8 → $5s · 5/9 → $2s · 4/10 → any
+        </div>
         {passLineBet > 0 && (
           <div style={{marginTop:4,fontSize:10,color:"#4fc3f7"}}>
             {oddsMultiplier}x odds limit · max ${maxOdds}
@@ -578,11 +587,13 @@ export default function CrapsGame() {
     const maxOdds = cb.base * oddsMultiplier;
     const remaining = maxOdds - cb.odds;
     if (remaining <= 0) return;
-    const add = Math.min(wager || 5, remaining);
+    const mult = ODDS_CLEAN_MULT[num] || 1;
+    const raw = Math.min(wager || mult, remaining);
+    const add = Math.max(mult, Math.floor(raw / mult) * mult);
     if (balance < add) { setMsg({ text:"Insufficient balance!", type:"lose" }); return; }
+    if (add < (wager||mult)) setMsg({ text:`Adjusted to $${add} — Come odds on ${num} must be in multiples of $${mult}.`, type:"info" });
     setComeBets(p=>({ ...p, [num]: { ...p[num], odds: p[num].odds + add } }));
     setBalance(p=>p-add);
-    // wager stays sticky
   }, [rolling, comeBets, oddsMultiplier, wager, balance]);
 
   const removeComeOdds = useCallback((num) => {
@@ -601,12 +612,19 @@ export default function CrapsGame() {
     if (!check?.ok) return;
     if (balance < wager) { setMsg({ text:"Insufficient balance!", type:"lose" }); return; }
 
-    // Enforce odds cap for passOdds / dontPassOdds
+    // Round wager down to clean multiple for odds bets so payouts are always whole dollars
+    // Pass: 6/8 → $5s, 5/9 → $2s, 4/10 → $1s
+    // Lay:  6/8 → $6s, 5/9 → $3s, 4/10 → $2s
+    const snapToMultiple = (amount, mult) => Math.max(mult, Math.floor(amount / mult) * mult);
+
     if (key==="passOdds") {
       const max = (bets.passLine||0) * oddsMultiplier;
       const current = bets.passOdds||0;
-      const add = Math.min(wager, max-current);
-      if (add<=0) return;
+      const mult = ODDS_CLEAN_MULT[point] || 1;
+      const raw = Math.min(wager, max - current);
+      const add = snapToMultiple(raw, mult);
+      if (add <= 0) return;
+      if (add < wager) setMsg({ text:`Adjusted to $${add} — odds on ${point} must be in multiples of $${mult} for a clean payout.`, type:"info" });
       setBets(p=>({...p, passOdds:(p.passOdds||0)+add}));
       setBalance(p=>p-add);
       setBetInfo(key); return;
@@ -614,8 +632,11 @@ export default function CrapsGame() {
     if (key==="dontPassOdds") {
       const max = (bets.dontPass||0) * oddsMultiplier;
       const current = bets.dontPassOdds||0;
-      const add = Math.min(wager, max-current);
-      if (add<=0) return;
+      const mult = LAY_CLEAN_MULT[point] || 1;
+      const raw = Math.min(wager, max - current);
+      const add = snapToMultiple(raw, mult);
+      if (add <= 0) return;
+      if (add < wager) setMsg({ text:`Adjusted to $${add} — lay odds on ${point} must be in multiples of $${mult} for a clean payout.`, type:"info" });
       setBets(p=>({...p, dontPassOdds:(p.dontPassOdds||0)+add}));
       setBalance(p=>p-add);
       setBetInfo(key); return;
@@ -733,18 +754,40 @@ export default function CrapsGame() {
       if (total===7) {
         // Pass Line / Odds lose
         lose("passLine"); lose("passOdds");
-        // Don't Pass / Odds win
-        pay("dontPass",1); pay("dontPassOdds",1);
+        // Don't Pass wins at 1:1; Don't Pass Odds pays lay odds (you risked more, win less — no edge)
+        pay("dontPass",1);
+        const doa = nb.dontPassOdds||0;
+        if (doa>0) {
+          const layRatios = { 4:"1:2", 5:"2:3", 6:"5:6", 8:"5:6", 9:"2:3", 10:"1:2" };
+          const w = Math.round(doa * LAY_PAYOUT[point]);
+          winAmt += w + doa;
+          delete nb.dontPassOdds;
+          wins.push(`+$${w} Don't Pass Odds (${layRatios[point]||"lay odds"})`);
+        }
         // Place bets lose
         ["place4","place5","place6","place8","place9","place10"].forEach(k=>lose(k));
         // Hardways lose
         ["hardway4","hardway6","hardway8","hardway10"].forEach(k=>lose(k));
         // Don't Come wins
         if (pendingDontCome>0){ winAmt+=pendingDontCome*2; wins.push(`+$${pendingDontCome} Don't Come (natural)`); }
-        // Come bets in number boxes lose their base; odds are RETURNED (standard Vegas rule)
-        Object.entries(nc).forEach(([num,cb])=>{
-          losses.push(`-$${cb.base} Come on ${num}`);
-          if (cb.odds>0){ winAmt+=cb.odds; pushes.push(`Odds returned $${cb.odds} (Come ${num})`); }
+        // Come bets in number boxes: Pass Come loses base (odds returned); Don't Come wins at lay odds
+        const layRatios = { 4:"1:2", 5:"2:3", 6:"5:6", 8:"5:6", 9:"2:3", 10:"1:2" };
+        Object.entries(nc).forEach(([key,cb])=>{
+          if (cb.isDont) {
+            // Don't Come traveled bet WINS on 7
+            const w = Math.floor(cb.base * 1); // flat part pays 1:1
+            winAmt += w + cb.base;
+            wins.push(`+$${w} Don't Come on ${cb.num}`);
+            if (cb.odds>0) {
+              const ow = Math.round(cb.odds * LAY_PAYOUT[cb.num]);
+              winAmt += ow + cb.odds;
+              wins.push(`+$${ow} Don't Come Odds on ${cb.num} (${layRatios[cb.num]||"lay"})`);
+            }
+          } else {
+            // Pass Come traveled bet LOSES base; odds returned
+            losses.push(`-$${cb.base} Come on ${key}`);
+            if (cb.odds>0){ winAmt+=cb.odds; pushes.push(`Odds returned $${cb.odds} (Come ${key})`); }
+          }
         });
         nc={};
         // Pending Come loses on 7
@@ -756,7 +799,7 @@ export default function CrapsGame() {
         // Point made — Pass Line wins, place bets STAY on table (go off during come-out)
         pay("passLine",1);
         const oa=nb.passOdds||0;
-        if (oa>0){ const w=Math.floor(oa*ODDS_PAYOUT[point]); winAmt+=w+oa; delete nb.passOdds; wins.push(`+$${w} Pass Odds`); }
+        if (oa>0){ const w=Math.round(oa*ODDS_PAYOUT[point]); winAmt+=w+oa; delete nb.passOdds; wins.push(`+$${w} Pass Odds`); }
         lose("dontPass"); lose("dontPassOdds");
         // Note any place/hardway bets that are held over for the next round
         const heldOver = ["place4","place5","place6","place8","place9","place10","hardway4","hardway6","hardway8","hardway10"]
@@ -815,21 +858,21 @@ export default function CrapsGame() {
       // ── Come bets already in number boxes ─────────────────────────────
       Object.entries(nc).forEach(([key,cb])=>{
         if (cb.isDont) {
-          // Don't Come: win if 7 (handled above), lose if number hits
+          // Don't Come: loses if its number hits before 7
           if (Number(cb.num)===total) {
-            losses.push(`-$${cb.base} Don't Come on ${cb.num} (lost)`);
+            losses.push(`-$${cb.base} Don't Come on ${cb.num}`);
             if (cb.odds>0){ losses.push(`-$${cb.odds} Don't Come Odds on ${cb.num}`); }
             delete nc[key];
           }
+          // 7 case handled above in 7-out block
         } else {
           const num=Number(key);
           if (num===total) {
-            // Come bet wins
-            winAmt+=cb.base*2; wins.push(`+$${cb.base} Come on ${num} wins`);
-            if (cb.odds>0){ const w=Math.floor(cb.odds*ODDS_PAYOUT[num]); winAmt+=w+cb.odds; wins.push(`+$${w} Come Odds on ${num}`); }
+            // Come bet wins at 1:1 on flat; odds pay true odds for that number
+            winAmt+=cb.base*2; wins.push(`+$${cb.base} Come on ${num}`);
+            if (cb.odds>0){ const w=Math.round(cb.odds*ODDS_PAYOUT[num]); winAmt+=w+cb.odds; wins.push(`+$${w} Come Odds on ${num} (${ODDS_LABEL[num]})`); }
             delete nc[num];
           }
-          // 7 case already handled above
         }
       });
     }
