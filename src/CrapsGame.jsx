@@ -41,7 +41,7 @@ function TableDiagram() {
     { id:"come",    label:"COME", x:10,y:42,w:80,h:19, color:"#0a3a2a", hc:"#4db6ac", info:"Come bet area. Works like Pass Line but placed mid-round. Your next roll is your personal come-out. Once it travels to a number box, you can take odds behind it." },
     { id:"dontpass",label:"DON'T PASS BAR 12", x:10,y:63,w:80,h:10, color:"#3a1a6a", hc:"#9575cd", info:"Don't Pass strip — thin bar just inside the Pass Line. 'BAR 12' means 12 is a push." },
     { id:"pass",    label:"PASS  LINE", x:10,y:75,w:80,h:12, color:"#1a4a8a", hc:"#4fc3f7", info:"Pass Line — outermost strip, full length of the table. Most popular bet." },
-    { id:"odds",    label:"★ ODDS — behind Pass Line (not printed on felt)", x:10,y:89,w:80,h:8, color:"#0a2a0a", hc:"#00c875", info:"FREE ODDS: Not on the felt! After point is set, place chips directly behind your Pass Line bet. Tell dealer 'odds on the pass.' Same spot behind Come bets once they travel to a number." },
+    { id:"odds",    label:"★ ODDS — behind Pass Line (not printed on felt)", x:10,y:89,w:80,h:8, color:"#0a2a0a", hc:"#00c875", info:"TRUE ODDS: Not on the felt! After point is set, place chips directly behind your Pass Line bet. Tell dealer 'odds on the pass.' Same spot behind Come bets once they travel to a number." },
   ];
   return (
     <div style={{ margin:"12px 0" }}>
@@ -88,23 +88,23 @@ const GUIDE_SECTIONS = [
         { label:"Come / Don't Come", color:"#4db6ac", position:"Large center section. Come bets start here; dealer moves chips to number boxes once your personal point is set. Come odds go behind that number box." },
         { label:"Place Bets 4–10", color:"#ffb74d", position:"Row of numbered boxes across the top. Slide chips to dealer; they place them. Never reach across the layout." },
         { label:"Field", color:"#ef9a9a", position:"Wide strip listing 2,3,4,9,10,11,12 — place your own chip here before each roll." },
-        { label:"Free Odds", color:"#00c875", position:"NOT on the felt. After point is set, stack odds chips behind your Pass Line bet outside the rail. For Come bets, behind the number box the dealer placed your chips in." },
+        { label:"True Odds", color:"#00c875", position:"NOT on the felt. After point is set, stack odds chips behind your Pass Line bet outside the rail. For Come bets, behind the number box the dealer placed your chips in." },
         { label:"Hardways / Props", color:"#ff8a65", position:"Center, managed by stickman. Toss chips to stickman and call: 'hard eight,' 'any craps,' etc." },
       ]},
     ],
   },
   {
-    id:"odds", title:"Free Odds — The 0% Bet", icon:"★",
+    id:"odds", title:"True Odds — The 0% Bet", icon:"★",
     content:[
-      { type:"text", body:"The Free Odds bet is the single best bet in any casino. The house pays true mathematical probability — zero profit margin. It exists nowhere else in gambling." },
-      { type:"callout", color:"#00c875", title:"Why it matters", body:"Every other bet has a built-in edge. Slots: 5–15%. Roulette: 2.7–5.3%. Pass Line: 1.41%. Free Odds: exactly 0%. The casino earns nothing. They allow it because most players don't know it exists." },
+      { type:"text", body:"The True Odds bet is the single best bet in any casino. The casino pays you exactly what the math says the bet is worth — no markup, no house cut. Every other bet in the building has a margin built in. This one doesn't. It's not 'free' in the sense of costing nothing — you're still risking money — it's even odds, meaning the payout perfectly matches the probability." },
+      { type:"callout", color:"#00c875", title:"Why it matters", body:"Every other bet has a built-in edge. Slots: 5–15%. Roulette: 2.7–5.3%. Pass Line: 1.41%. True Odds: exactly 0%. The casino earns nothing on this bet. They allow it because most players don't know it exists — and because the flat Pass/Don't Pass bet they require underneath still earns them their edge." },
       { type:"text", body:"How to take odds: once the point is set, place chips directly behind your Pass Line bet — outside the outermost rail. For Come bets that have traveled to a number, place odds behind the number box. Payout depends on the point:" },
       { type:"odds_table", rows:[
         { point:"4 or 10", ways_to_hit:3, ways_to_seven:6, true_odds:"2 : 1", example:"$10 wins $20", difficulty:"hard" },
         { point:"5 or 9",  ways_to_hit:4, ways_to_seven:6, true_odds:"3 : 2", example:"$10 wins $15", difficulty:"medium" },
         { point:"6 or 8",  ways_to_hit:5, ways_to_seven:6, true_odds:"6 : 5", example:"$10 wins $12", difficulty:"easy" },
       ]},
-      { type:"callout", color:"#ffb74d", title:"Odds cap — real casino limits", body:"Casinos limit odds to a multiple of your flat bet. Strip casinos typically allow 3x–5x odds. Downtown Las Vegas: 10x or 100x. The app lets you choose 3x, 5x, or 10x to simulate different casino conditions. Always take the maximum allowed — the more of your wager in free odds, the lower your combined edge." },
+      { type:"callout", color:"#ffb74d", title:"Odds cap — real casino limits", body:"Casinos limit odds to a multiple of your flat bet. Strip casinos typically allow 3x–5x odds. Downtown Las Vegas: 10x or 100x. The app lets you choose 3x, 5x, or 10x to simulate different casino conditions. Always take the maximum allowed — the more of your wager at true odds, the lower your combined edge." },
       { type:"callout", color:"#4fc3f7", title:"Combined house edge with odds (Pass Line)", body:"Pass alone: 1.41%. With 1x: 0.85%. With 2x: 0.61%. With 3x: 0.47%. With 5x: 0.33%. With 10x: 0.18%. The flat bet always carries 1.41% edge; the odds dilute it across your total wager." },
       { type:"text", body:"Come bet odds work identically: once your Come bet travels to a number, tell the dealer 'odds on the come' and place chips behind that number's box. If a 7-out happens, your Come odds are returned (in real casinos, Come odds are 'off' on the come-out roll by default — they don't lose to a 7 on come-out, only the flat Come bet does)." },
       { type:"callout", color:"#00c875", title:"Casino chip tip", body:"For 6/8, bet odds in multiples of $5 (pays $6 per $5). For 5/9, bet even amounts (pays 3:2). For 4/10, any amount. This avoids the dealer breaking chips." },
@@ -115,7 +115,7 @@ const GUIDE_SECTIONS = [
     content:[
       { type:"text", body:"Craps has the best and worst bets in the casino sitting right next to each other. This strategy keeps your combined house edge well under 1%:" },
       { type:"strategy_steps", items:[
-        { step:1, title:"Pass Line + Maximum Odds", edge:"~0.4%", color:"#00c875", desc:"Make a modest Pass Line bet every come-out. Once the point is set, back it with maximum free odds. This is the foundation." },
+        { step:1, title:"Pass Line + Maximum Odds", edge:"~0.4%", color:"#00c875", desc:"Make a modest Pass Line bet every come-out. Once the point is set, back it with maximum true odds. This is the foundation." },
         { step:2, title:"Come bets + Odds", edge:"~0.4%", color:"#00c875", desc:"Once a point is set, add Come bets to get more numbers working. Take maximum odds on each Come bet once it travels. This is the full 'Pass Line + Come' strategy used by serious players." },
         { step:3, title:"Place 6 and/or Place 8", edge:"1.52%", color:"#4fc3f7", desc:"If you want instant action on 6 or 8 without waiting for a Come bet to travel, Place 6/8 in multiples of $6. Best place bet on the table." },
         { step:4, title:"Avoid everything else", edge:"5–17%", color:"#ef5350", desc:"Any 7, Horn, Hardways, Field, and proposition bets carry brutal edges. The casino makes most of its craps profit from these bets." },
@@ -160,7 +160,7 @@ const GUIDE_SECTIONS = [
         { term:"OFF puck",      def:"Black side of puck in corner — no point set." },
         { term:"Stickman",      def:"Controls dice, manages center prop bets." },
         { term:"Boxman",        def:"Supervisor seated at center watching chips." },
-        { term:"Lay odds",      def:"Taking free odds on a Don't Pass/Don't Come bet." },
+        { term:"Lay odds",      def:"Taking true odds on a Don't Pass/Don't Come bet." },
         { term:"Come odds off", def:"By default, Come bet odds don't lose to a come-out 7 — only the flat bet does. You can ask for 'odds working' to override." },
         { term:"Working",       def:"Bets active for the current roll." },
         { term:"Press it",      def:"Double a place bet after a win." },
@@ -308,7 +308,7 @@ function OddsDetailPanel({ point, oddsMultiplier, passLineBet, passOddsBet }) {
 
   return (
     <div style={{margin:"4px 12px 8px",background:"#0a1a0a",border:"1px solid #00c87544",borderRadius:8,overflow:"hidden",fontSize:11}}>
-      <div style={{padding:"6px 10px",background:"#00c87518",borderBottom:"1px solid #00c87522",color:"#00c875",fontWeight:600,fontSize:10,letterSpacing:1}}>FREE ODDS PAYOUT BY POINT</div>
+      <div style={{padding:"6px 10px",background:"#00c87518",borderBottom:"1px solid #00c87522",color:"#00c875",fontWeight:600,fontSize:10,letterSpacing:1}}>TRUE ODDS PAYOUT BY POINT</div>
       {rows.map((r,i)=>(
         <div key={i} style={{display:"flex",alignItems:"center",padding:"5px 10px",background:activeRow===r?"#00c87512":"transparent",borderLeft:activeRow===r?"3px solid #00c875":"3px solid transparent",borderBottom:i<rows.length-1?"1px solid #111":"none"}}>
           <div style={{flex:1,color:activeRow===r?"#fff":"#aaa"}}>{r.pts}</div>
@@ -358,7 +358,7 @@ function ContextTip({ phase, point, bets, oddsMultiplier, onOpenGuide }) {
   } else if (phase === "point" && hasPass && !hasOdds) {
     tip = {
       color: "#00c875", icon: "★",
-      text: `Point is ${point} — take Free Odds on your Pass Line! Pays ${oddsPayouts[point]||"true odds"} with zero house edge. Place chips behind your Pass Line bet. Up to ${oddsMultiplier}x.`,
+      text: `Point is ${point} — take True Odds on your Pass Line! Pays ${oddsPayouts[point]||"true odds"} with zero house edge. Place chips behind your Pass Line bet. Up to ${oddsMultiplier}x.`,
       action: "How odds work →", guide: "odds",
     };
   } else if (phase === "point" && hasDont && !hasDontOdds) {
@@ -522,7 +522,7 @@ const BETS = {
 };
 
 const CHIP_DENOMS = [1,5,25,100,500];
-const CAT_LABELS = { primary:"Main Bets", odds:"Free Odds — 0% Edge", place:"Place Bets", "one-roll":"One-Roll Bets", prop:"Proposition Bets", hard:"Hardways" };
+const CAT_LABELS = { primary:"Main Bets", odds:"True Odds — 0% Edge", place:"Place Bets", "one-roll":"One-Roll Bets", prop:"Proposition Bets", hard:"Hardways" };
 const getEdgeColor = e => e===0?"#00c875":e<2?"#4fc3f7":e<5?"#ffb74d":"#ef5350";
 const getEdgeLabel = e => e===0?"★ 0%":e<2?"✓ Low":e<5?"~ Med":"✗ High";
 
@@ -541,6 +541,7 @@ export default function CrapsGame() {
   const [dice, setDice]                 = useState([1,6]);
   const [rolling, setRolling]           = useState(false);
   const [wager, setWager]               = useState(0);  // accumulated bet amount built from chip tray
+  const [lastChip, setLastChip]         = useState(null); // most recently added chip denomination
   const [oddsMultiplier, setOddsMultiplier] = useState(3);
   const [history, setHistory]           = useState([]);
   const [msg, setMsg]                   = useState({ text:"Place your bets! Come-out roll.", type:"info" });
@@ -554,11 +555,20 @@ export default function CrapsGame() {
 
   const addChip = useCallback((amt) => {
     if (rolling) return;
-    if (balance < wager + amt) return; // can't build a wager bigger than balance
+    if (balance < wager + amt) return;
     setWager(p => p + amt);
+    setLastChip(amt);
   }, [rolling, balance, wager]);
 
-  const clearWager = useCallback(() => setWager(0), []);
+  const removeChip = useCallback(() => {
+    if (!lastChip || wager < lastChip) return;
+    const next = wager - lastChip;
+    setWager(next);
+    // recalculate lastChip — if wager still > 0 keep same denom, else null
+    if (next === 0) setLastChip(null);
+  }, [lastChip, wager]);
+
+  const clearWager = useCallback(() => { setWager(0); setLastChip(null); }, []);
 
   // For Come odds bet: we add odds to a specific come-bet number
   const placeComeOdds = useCallback((num) => {
@@ -572,7 +582,7 @@ export default function CrapsGame() {
     if (balance < add) { setMsg({ text:"Insufficient balance!", type:"lose" }); return; }
     setComeBets(p=>({ ...p, [num]: { ...p[num], odds: p[num].odds + add } }));
     setBalance(p=>p-add);
-    setWager(0);
+    // wager stays sticky
   }, [rolling, comeBets, oddsMultiplier, wager, balance]);
 
   const removeComeOdds = useCallback((num) => {
@@ -599,7 +609,7 @@ export default function CrapsGame() {
       if (add<=0) return;
       setBets(p=>({...p, passOdds:(p.passOdds||0)+add}));
       setBalance(p=>p-add);
-      setWager(0); setBetInfo(key); return;
+      setBetInfo(key); return;
     }
     if (key==="dontPassOdds") {
       const max = (bets.dontPass||0) * oddsMultiplier;
@@ -608,24 +618,23 @@ export default function CrapsGame() {
       if (add<=0) return;
       setBets(p=>({...p, dontPassOdds:(p.dontPassOdds||0)+add}));
       setBalance(p=>p-add);
-      setWager(0); setBetInfo(key); return;
+      setBetInfo(key); return;
     }
 
     // Come / Don't Come go into pending state
     if (key==="come") {
       setPendingCome(p=>p+wager);
       setBalance(p=>p-wager);
-      setWager(0); setBetInfo(key); return;
+      setBetInfo(key); return;
     }
     if (key==="dontCome") {
       setPendingDontCome(p=>p+wager);
       setBalance(p=>p-wager);
-      setWager(0); setBetInfo(key); return;
+      setBetInfo(key); return;
     }
 
     setBets(p=>({...p,[key]:(p[key]||0)+wager}));
     setBalance(p=>p-wager);
-    setWager(0);
     setBetInfo(key);
   }, [rolling, gs, wager, balance, bets, oddsMultiplier]);
 
@@ -671,6 +680,9 @@ export default function CrapsGame() {
         headline = total===7 ? "Natural 7" : "Natural 11";
         headline += nb.dontPass > 0 ? " — Don't Pass loses" : nb.passLine > 0 ? " — Pass Line wins!" : " — Natural!";
         roundEnds=true; nextPhase="comeout"; nextPoint=null;
+        // place bets survive but are off
+        const heldNat = ["place4","place5","place6","place8","place9","place10"].filter(k=>nb[k]>0).map(k=>`${BETS[k]?.label}`);
+        if (heldNat.length) headline += ` · ${heldNat.join(", ")} held`;
         setMsg({ text:`${total}! Natural — ${nb.passLine>0?"Pass Line wins!":nb.dontPass>0?"Don't Pass loses.":"Natural!"}`, type: msgType });
       } else if (total===2||total===3) {
         lose("passLine"); pay("dontPass",1);
@@ -686,17 +698,33 @@ export default function CrapsGame() {
         setMsg({ text:"12 — Craps! Don't Pass pushes.", type: nb.passLine>0?"lose":"push" });
       } else {
         // Point established
+        // If there's a place bet on this number, refund it — can't have both
+        const placeKey = `place${total}`;
+        if (nb[placeKey]) {
+          const refund = nb[placeKey];
+          winAmt += refund;
+          delete nb[placeKey];
+          pushes.push(`Refunded $${refund} Place ${total} — now covered by Pass Line`);
+        }
         setPoint(total); setPhase("point"); nextPhase="point"; nextPoint=total;
         setMsg({ text:`Point is ${total}. Roll it before 7!`, type:"info" });
         const newlyAvail=[];
-        if (nb.passLine)  newlyAvail.push("★ Free Odds on Pass Line");
+        if (nb.passLine)  newlyAvail.push("★ True Odds on Pass Line");
         if (nb.dontPass)  newlyAvail.push("★ Don't Pass Odds");
         newlyAvail.push("Come / Don't Come");
         const placeable=[4,5,6,8,9,10].filter(n=>n!==total);
         if (placeable.length) newlyAvail.push(`Place ${placeable.join(", ")}`);
         newlyAvail.push("Hardways");
-        setHistory(p=>[{ roll:[d1,d2],total,type:"pointSet",headline:`Point set: ${total}`,wins:[],losses:[],pushes:[],net:0,roundEnds:false,nextPhase:"point",nextPoint:total,newBets:newlyAvail },...p.slice(0,19)]);
-        setBets(nb); setComeBets(nc); return;
+        // Note any held-over place bets now back in play
+        const heldBack = ["place4","place5","place6","place8","place9","place10"]
+          .filter(k=>nb[k]>0)
+          .map(k=>`${BETS[k]?.label} $${nb[k]}`);
+        const headline = heldBack.length
+          ? `Point set: ${total} · Held bets back on: ${heldBack.join(", ")}`
+          : `Point set: ${total}`;
+        const net = winAmt - Object.values(bets).reduce((s,v)=>s+v,0) + Object.values(nb).reduce((s,v)=>s+v,0);
+        setHistory(p=>[{ roll:[d1,d2],total,type:"pointSet",headline,wins:[],losses:[],pushes,net,roundEnds:false,nextPhase:"point",nextPoint:total,newBets:newlyAvail },...p.slice(0,19)]);
+        setBets(nb); setComeBets(nc); setBalance(p=>p+winAmt); return;
       }
     }
 
@@ -725,14 +753,20 @@ export default function CrapsGame() {
         setPoint(null); setPhase("comeout");
         setMsg({ text:"7-Out! Pass Line loses. New come-out.", type:"lose" });
       } else if (total===point) {
-        // Point made
+        // Point made — Pass Line wins, place bets STAY on table (go off during come-out)
         pay("passLine",1);
         const oa=nb.passOdds||0;
         if (oa>0){ const w=Math.floor(oa*ODDS_PAYOUT[point]); winAmt+=w+oa; delete nb.passOdds; wins.push(`+$${w} Pass Odds`); }
         lose("dontPass"); lose("dontPassOdds");
+        // Note any place/hardway bets that are held over for the next round
+        const heldOver = ["place4","place5","place6","place8","place9","place10","hardway4","hardway6","hardway8","hardway10"]
+          .filter(k=>nb[k]>0)
+          .map(k=>`${BETS[k]?.label} $${nb[k]}`);
+        if (heldOver.length) pushes.push(`Held over: ${heldOver.join(", ")} (off during come-out)`);
         type="pointMade"; headline=`${total} — Point made! Round over`; roundEnds=true; nextPhase="comeout"; nextPoint=null;
         setPoint(null); setPhase("comeout");
-        setMsg({ text:`${total}! Point made — Pass Line wins!`, type:"win" });
+        const msgType = nb.dontPass > 0 ? "lose" : "win";
+        setMsg({ text:`${total}! Point made — Pass Line wins!`, type: msgType });
       } else {
         headline=`Rolled ${total} — no decision on point ${point}`;
       }
@@ -934,48 +968,84 @@ export default function CrapsGame() {
             </button>
           </div>
 
-          {/* Chip tray — build wager then click a bet */}
-          <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:8,width:"100%",maxWidth:400}}>
-            {/* Wager display */}
-            <div style={{display:"flex",alignItems:"center",gap:12,width:"100%",justifyContent:"center"}}>
+          {/* Chip tray — sticky wager, click chips to add, +/- to adjust */}
+          <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:8,width:"100%",maxWidth:420}}>
+            {/* Wager display with nudge controls */}
+            <div style={{display:"flex",alignItems:"center",gap:8,width:"100%",justifyContent:"center"}}>
+              {/* Remove one chip */}
+              <button
+                onClick={removeChip}
+                disabled={!lastChip || wager < lastChip}
+                style={{
+                  width:34, height:34, borderRadius:"50%",
+                  background:"none", border:`1px solid ${lastChip&&wager>=lastChip?"#ef535088":"#333"}`,
+                  color: lastChip&&wager>=lastChip?"#ef5350":"#444",
+                  fontSize:18, cursor: lastChip&&wager>=lastChip?"pointer":"not-allowed",
+                  display:"flex", alignItems:"center", justifyContent:"center",
+                  transition:"all 0.15s", flexShrink:0,
+                  fontFamily:"'Oswald',sans-serif",
+                }}>−</button>
+
+              {/* Wager amount */}
               <div style={{
                 background:"#00000066", border:`1px solid ${wager>0?GOLD+"88":"#333"}`,
-                borderRadius:8, padding:"6px 20px", minWidth:140, textAlign:"center",
-                transition:"border-color 0.2s",
+                borderRadius:8, padding:"6px 0", minWidth:130, textAlign:"center",
+                transition:"border-color 0.2s", flex:1, maxWidth:160,
               }}>
                 <div style={{fontSize:10,color:TEXT_MUTED,letterSpacing:2,marginBottom:2}}>WAGER</div>
                 <div style={{fontSize:22,color:wager>0?GOLD_LIGHT:"#444",fontWeight:700,transition:"color 0.2s"}}>
                   {wager>0?`$${wager}`:"—"}
                 </div>
+                {lastChip&&wager>0&&(
+                  <div style={{fontSize:9,color:"#555",marginTop:1}}>−/+ ${lastChip}</div>
+                )}
               </div>
+
+              {/* Add one chip */}
+              <button
+                onClick={()=>lastChip&&addChip(lastChip)}
+                disabled={!lastChip || balance < wager + (lastChip||0)}
+                style={{
+                  width:34, height:34, borderRadius:"50%",
+                  background:"none", border:`1px solid ${lastChip&&balance>=wager+(lastChip||0)?"#00c87588":"#333"}`,
+                  color: lastChip&&balance>=wager+(lastChip||0)?"#00c875":"#444",
+                  fontSize:18, cursor: lastChip&&balance>=wager+(lastChip||0)?"pointer":"not-allowed",
+                  display:"flex", alignItems:"center", justifyContent:"center",
+                  transition:"all 0.15s", flexShrink:0,
+                  fontFamily:"'Oswald',sans-serif",
+                }}>+</button>
+
+              {/* Clear */}
               {wager>0&&(
-                <button onClick={clearWager} style={{background:"none",border:"1px solid #ef535066",borderRadius:6,color:"#ef5350",padding:"4px 10px",cursor:"pointer",fontSize:11,fontFamily:"'Oswald',sans-serif",letterSpacing:1}}>
-                  CLEAR
-                </button>
+                <button onClick={clearWager} style={{
+                  background:"none", border:"1px solid #ef535044", borderRadius:6,
+                  color:"#ef535088", padding:"4px 8px", cursor:"pointer",
+                  fontSize:10, fontFamily:"'Oswald',sans-serif", letterSpacing:1, flexShrink:0,
+                }}>CLR</button>
               )}
             </div>
+
             {/* Chip tray */}
-            <div style={{fontSize:10,color:TEXT_MUTED,letterSpacing:2}}>CLICK CHIPS TO BUILD WAGER, THEN CLICK A BET</div>
+            <div style={{fontSize:10,color:TEXT_MUTED,letterSpacing:2}}>
+              {wager>0 ? "CLICK A BET ON THE LEFT TO PLACE" : "CLICK CHIPS TO SET WAGER"}
+            </div>
             <div style={{display:"flex",gap:8,flexWrap:"wrap",justifyContent:"center"}}>
               {CHIP_DENOMS.map(d=>{
                 const canAdd = balance >= wager + d;
+                const isLast = d === lastChip;
                 return (
                   <div key={d} onClick={()=>canAdd&&addChip(d)} style={{
-                    transform: canAdd?"scale(1)":"scale(0.9)",
-                    opacity: canAdd?1:0.35,
-                    transition:"transform 0.1s, opacity 0.2s",
-                    cursor: canAdd?"pointer":"not-allowed",
+                    transform: isLast ? "scale(1.15) translateY(-3px)" : canAdd ? "scale(1)" : "scale(0.9)",
+                    opacity: canAdd ? 1 : 0.3,
+                    transition: "transform 0.15s, opacity 0.2s",
+                    cursor: canAdd ? "pointer" : "not-allowed",
+                    filter: isLast ? `drop-shadow(0 0 6px ${GOLD})` : "none",
                   }}>
                     <Chip amount={d}/>
                   </div>
                 );
               })}
             </div>
-            {wager>0&&(
-              <div style={{fontSize:10,color:"#4fc3f7",letterSpacing:1}}>
-                ↑ now click a bet on the left to place ${wager}
-              </div>
-            )}
           </div>
 
           <ContextTip phase={phase} point={point} bets={bets} oddsMultiplier={oddsMultiplier} onOpenGuide={()=>setShowGuide(true)}/>
@@ -1092,7 +1162,7 @@ export default function CrapsGame() {
 
       {/* Footer */}
       <div style={{ background:"#080808", borderTop:"1px solid #222", padding:"8px 20px", display:"flex", gap:20, alignItems:"center", justifyContent:"center", fontSize:10, color:TEXT_MUTED, flexWrap:"wrap" }}>
-        <span style={{color:"#00c875"}}>★ 0% — Free Odds</span>
+        <span style={{color:"#00c875"}}>★ 0% — True Odds</span>
         <span style={{color:"#4fc3f7"}}>✓ &lt;2% — Best bets</span>
         <span style={{color:"#ffb74d"}}>~ &lt;5% — Medium</span>
         <span style={{color:"#ef5350"}}>✗ 5%+ — Avoid</span>
